@@ -1,311 +1,579 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Organização Pessoal</title>
+    <title>EcoEscola - Combate ao Desperdício de Alimentos</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons (Vanilla JS SVG injection) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: #f0f4f8;
-            color: #333;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+            font-family: 'Inter', sans-serif;
         }
-
-        .container {
-            max-width: 1000px;
-            width: 100%;
+        .gradient-bg {
+            background: linear-gradient(135deg, #10B981 0%, #047857 100%);
         }
-
-        header {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-        }
-
-        header p {
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card h2 {
-            font-size: 1.2rem;
-            color: #1e293b;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 8px;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input[type="text"]:focus, textarea:focus {
-            border-color: #4f46e5;
-        }
-
-        button {
-            background-color: #4f46e5;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.2s;
-        }
-
-        button:hover {
-            background-color: #4338ca;
-        }
-
-        ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        li {
-            background-color: #f8fafc;
-            padding: 10px 12px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid #e2e8f0;
-        }
-
-        li.completed span {
-            text-decoration: line-through;
-            color: #94a3b8;
-        }
-
-        .item-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 0.85rem;
-            padding: 4px;
-        }
-
-        .delete-btn:hover {
-            background: none;
-            color: #dc2626;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .full-width {
-            grid-column: 1 / -1;
+        .gradient-text {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen selection:bg-emerald-200 selection:text-emerald-900">
 
-    <div class="container">
-        <header>
-            <h1 id="welcome-msg">Painel de Organização</h1>
-            <p>Acompanhe suas tarefas, hábitos e notas diárias em um só lugar.</p>
-        </header>
-
-        <div class="grid">
-            <!-- Lista de Tarefas -->
-            <div class="card">
-                <h2>Tarefas do Dia</h2>
-                <div class="input-group">
-                    <input type="text" id="task-input" placeholder="Nova tarefa...">
-                    <button onclick="addTask()">Adicionar</button>
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center text-white shadow-md shadow-emerald-600/20">
+                    <i data-lucide="sprout" class="w-6 h-6"></i>
                 </div>
-                <ul id="task-list"></ul>
+                <span class="font-extrabold text-xl tracking-tight text-slate-900">EcoEscola<span class="text-emerald-600">Zero</span></span>
             </div>
 
-            <!-- Hábitos Diários -->
-            <div class="card">
-                <h2>Hábitos & Rotina</h2>
-                <div class="input-group">
-                    <input type="text" id="habit-input" placeholder="Novo hábito...">
-                    <button onclick="addHabit()">Adicionar</button>
-                </div>
-                <ul id="habit-list"></ul>
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center space-x-8 font-medium text-sm text-slate-600">
+                <a href="#solucoes" class="hover:text-emerald-600 transition-colors">3 Soluções</a>
+                <a href="#simulador" class="hover:text-emerald-600 transition-colors">Simulador de Impacto</a>
+                <a href="#validacao" class="hover:text-emerald-600 transition-colors">Framework de Validação</a>
+                <a href="#faq" class="hover:text-emerald-600 transition-colors">Perguntas-Chave</a>
+            </nav>
+
+            <div class="hidden md:flex items-center">
+                <a href="#simulador" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl font-semibold text-sm text-white gradient-bg shadow-md shadow-emerald-600/20 hover:opacity-95 transition-all transform hover:-translate-y-0.5">
+                    <i data-lucide="calculator" class="w-4 h-4 mr-2"></i> Calcular Impacto
+                </a>
             </div>
 
-            <!-- Bloco de Notas -->
-            <div class="card full-width">
-                <h2>Anotações Rápida</h2>
-                <textarea id="notes" placeholder="Rascunhe suas ideias, lembretes ou reflexões aqui..." oninput="saveNotes()"></textarea>
-            </div>
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
         </div>
-    </div>
 
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-4 space-y-3">
+            <a href="#solucoes" class="block py-2 text-slate-600 font-medium hover:text-emerald-600">3 Soluções</a>
+            <a href="#simulador" class="block py-2 text-slate-600 font-medium hover:text-emerald-600">Simulador de Impacto</a>
+            <a href="#validacao" class="block py-2 text-slate-600 font-medium hover:text-emerald-600">Framework de Validação</a>
+            <a href="#faq" class="block py-2 text-slate-600 font-medium hover:text-emerald-600">Perguntas-Chave</a>
+            <a href="#simulador" class="block text-center w-full py-2.5 rounded-xl font-semibold text-white gradient-bg">Calcular Impacto</a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section class="relative py-16 md:py-24 overflow-hidden bg-gradient-to-b from-emerald-50/50 via-white to-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold">
+                            <i data-lucide="leaf" class="w-4 h-4 text-emerald-600"></i>
+                            <span>Inovação Social & Sustentabilidade Escolar</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                            Transforme o desperdício de merenda em <span class="gradient-text">oportunidade & consciência</span>.
+                        </h1>
+                        <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                            Uma metodologia completa para diagnosticar dores, engajar estudantes e aplicar soluções sustentáveis para zerar o descarte desnecessário de refeições na sua escola.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                            <a href="#solucoes" class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-base font-bold text-white gradient-bg shadow-lg shadow-emerald-600/30 hover:opacity-95 transition-all transform hover:-translate-y-0.5">
+                                Ver Soluções Práticas <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                            </a>
+                            <a href="#validacao" class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-base font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm">
+                                Explorar Validação
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Metric Quick-Card Showcase -->
+                    <div class="lg:col-span-5 relative">
+                        <div class="relative z-10 bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-slate-100 space-y-6">
+                            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                                <div>
+                                    <h3 class="font-bold text-slate-900 text-lg">Diagnóstico Rápido</h3>
+                                    <p class="text-xs text-slate-500">Média em escolas públicas & privadas</p>
+                                </div>
+                                <span class="px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-lg flex items-center gap-1">
+                                    <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> Alerta
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                    <p class="text-xs font-semibold text-slate-500 uppercase">Sobras/Dia</p>
+                                    <p class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">~ 15 a 30%</p>
+                                    <p class="text-xs text-rose-500 mt-1 flex items-center font-medium">
+                                        <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> Descarte direto
+                                    </p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                    <p class="text-xs font-semibold text-slate-500 uppercase">Impacto Anual</p>
+                                    <p class="text-2xl sm:text-3xl font-extrabold text-emerald-600 mt-1">Ton. / Ano</p>
+                                    <p class="text-xs text-emerald-700 mt-1 font-medium">Recuperável via Horta</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-emerald-50 rounded-2xl p-4 border border-emerald-100 flex items-start space-x-3">
+                                <div class="p-2 bg-emerald-600 text-white rounded-xl mt-0.5">
+                                    <i data-lucide="lightbulb" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-emerald-950">Metodologia Resto Zero</h4>
+                                    <p class="text-xs text-emerald-800 mt-0.5 leading-relaxed">
+                                        Pequenos ajustes nas porções servem como alavanca imediata para economizar recursos e educar a comunidade.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: 3 Practical Solutions -->
+        <section id="solucoes" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <h2 class="text-xs uppercase font-extrabold tracking-wider text-emerald-600">Ação Imediata</h2>
+                    <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900">3 Soluções Práticas contra o Desperdício Escolar</h3>
+                    <p class="text-slate-600 text-base">Estratégias testadas para reduzir o volume do lixo orgânico, transformar a cultura e envolver alunos e merendeiras.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Solution 1 -->
+                    <div class="group bg-slate-50 hover:bg-white rounded-3xl p-8 border border-slate-200/80 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                <i data-lucide="utensils-crossed" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Solução 01</span>
+                            <h4 class="text-xl font-bold text-slate-900 mt-1 mb-3">Adequação de Porções & Cardápios Participativos</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                Permitir escolhas de quantidade (meias-porções) evita que o excesso vá direto pro lixo.
+                            </p>
+                            <div class="space-y-2 border-t border-slate-200/60 pt-4">
+                                <div class="flex items-start text-xs text-slate-700 font-medium">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i>
+                                    <span><strong>Como funciona:</strong> Opção de personalização no prato antes de servir.</span>
+                                </div>
+                                <div class="flex items-start text-xs text-slate-700 font-medium">
+                                    <i data-lucide="zap" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i>
+                                    <span><strong>Ação:</strong> Pesquisas frequentes de aceitabilidade dos pratos.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solution 2 -->
+                    <div class="group bg-slate-50 hover:bg-white rounded-3xl p-8 border border-slate-200/80 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                <i data-lucide="recycle" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Solução 02</span>
+                            <h4 class="text-xl font-bold text-slate-900 mt-1 mb-3">Compostagem & Horta Escolar Sustentável</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                Restos orgânicos de pré-preparo viram adubo nutritivo para vegetais cultivados pelos alunos.
+                            </p>
+                            <div class="space-y-2 border-t border-slate-200/60 pt-4">
+                                <div class="flex items-start text-xs text-slate-700 font-medium">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i>
+                                    <span><strong>Como funciona:</strong> Processamento de cascas e sobras limpas na escola.</span>
+                                </div>
+                                <div class="flex items-start text-xs text-slate-700 font-medium">
+                                    <i data-lucide="zap" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i>
+                                    <span><strong>Ação:</strong> Horta comunitária e feira ecológica de verduras.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solution 3 -->
+                    <div class="group bg-slate-50 hover:bg-white rounded-3xl p-8 border border-slate-200/80 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                <i data-lucide="bar-chart-3" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Solução 03</span>
+                            <h4 class="text-xl font-bold text-slate-900 mt-1 mb-3">Campanhas & Pesagem Pública do Lixo</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                                Medir o desperdício diário e expor em placares torna o problema visível para os alunos.
+                            </p>
+                            <div class="space-y-2 border-t border-slate-200/60 pt-4">
+                                <div class="flex items-start text-xs text-slate-700 font-medium">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i>
+                                    <span><strong>Como funciona:</strong> Metrificação pública semanal ("Dia Resto Zero").</span>
+                                </div>
+                                <div class="flex items-start text-xs text-slate-700 font-medium">
+                                    <i data-lucide="zap" class="w-4 h-4 text-emerald-600 mr-2 flex-shrink-0 mt-0.5"></i>
+                                    <span><strong>Ação:</strong> Cartazes visuais e desafios entre turmas.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Simulator Section -->
+        <section id="simulador" class="py-20 bg-slate-900 text-white relative overflow-hidden">
+            <!-- Subtle background circle -->
+            <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
+                    <span class="text-xs uppercase font-extrabold tracking-widest text-emerald-400">Ferramenta Interativa</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold">Simulador de Desperdício Escolar</h2>
+                    <p class="text-slate-400 text-sm sm:text-base">Ajuste o número de alunos da sua instituição e veja a estimativa de impacto em quilos e custos que podem ser salvos com as 3 soluções.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Controls -->
+                    <div class="lg:col-span-5 bg-slate-800/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-slate-700 space-y-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label for="students-range" class="text-sm font-semibold text-slate-200">Total de Alunos Refeição/Dia:</label>
+                                <span id="students-val" class="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-lg font-bold text-base border border-emerald-500/30">500</span>
+                            </div>
+                            <input type="range" id="students-range" min="50" max="3000" step="50" value="500" 
+                                class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                            <div class="flex justify-between text-xs text-slate-400 mt-1">
+                                <span>50</span>
+                                <span>1.500</span>
+                                <span>3.000</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label for="waste-range" class="text-sm font-semibold text-slate-200">Média de Desperdício estimado/Aluno:</label>
+                                <span id="waste-val" class="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-lg font-bold text-base border border-amber-500/30">80 g</span>
+                            </div>
+                            <input type="range" id="waste-range" min="20" max="200" step="10" value="80" 
+                                class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                            <div class="flex justify-between text-xs text-slate-400 mt-1">
+                                <span>20g (Baixo)</span>
+                                <span>100g (Médio)</span>
+                                <span>200g (Alto)</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-700/60">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-2">Custo Médio/Kg de Refeição (R$)</label>
+                            <input type="number" id="cost-input" value="14" min="1" max="100" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-white font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- Output Cards -->
+                    <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-slate-800/40 border border-slate-700/60 p-6 rounded-2xl flex flex-col justify-between">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="p-3 bg-rose-500/10 text-rose-400 rounded-xl">
+                                    <i data-lucide="scale" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-slate-400 font-medium">Perda em Peso</span>
+                                    <h4 class="text-base font-bold text-slate-200">Desperdício Diário</h4>
+                                </div>
+                            </div>
+                            <div>
+                                <span id="daily-kg" class="text-3xl sm:text-4xl font-extrabold text-white">40.0</span>
+                                <span class="text-slate-400 text-sm"> kg / dia</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/40 border border-slate-700/60 p-6 rounded-2xl flex flex-col justify-between">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="p-3 bg-amber-500/10 text-amber-400 rounded-xl">
+                                    <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-slate-400 font-medium">Perda Financeira</span>
+                                    <h4 class="text-base font-bold text-slate-200">Prejuízo Mensal (20 dias)</h4>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-slate-400 text-lg">R$ </span>
+                                <span id="monthly-cost" class="text-3xl sm:text-4xl font-extrabold text-rose-400">11.200</span>
+                            </div>
+                        </div>
+
+                        <!-- Savings Projection Card (Full width on sm grid) -->
+                        <div class="sm:col-span-2 bg-gradient-to-r from-emerald-950/80 to-slate-800 border border-emerald-500/30 p-6 rounded-2xl">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center">
+                                    <i data-lucide="sparkles" class="w-4 h-4 mr-1"></i> Potencial de Economia (Redução de 60%)
+                                </span>
+                                <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-semibold">Com as 3 Soluções</span>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between mt-2 gap-2">
+                                <div>
+                                    <p class="text-3xl sm:text-4xl font-extrabold text-emerald-400" id="saved-kg">480 kg</p>
+                                    <p class="text-xs text-slate-300 mt-1">Alimentos poupados por mês</p>
+                                </div>
+                                <div class="sm:text-right">
+                                    <p class="text-2xl sm:text-3xl font-extrabold text-white" id="saved-cost">R$ 6.720</p>
+                                    <p class="text-xs text-slate-300 mt-1">Verba preservada/mês</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Validation Framework (5 Questions Section) -->
+        <section id="validacao" class="py-20 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600">Investigação Prática</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Mapa de Validação do Problema</h2>
+                    <p class="text-slate-600 text-base">As 5 perguntas essenciais aplicadas diretamente ao contexto da merenda escolar.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Question 1 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center font-bold text-lg mb-4">1</div>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">Quem sente esse problema?</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            <strong>Estudantes</strong> (que deixam refeições no prato), <strong>cozinheiras</strong> (que veem seu trabalho descartado) e a <strong>direção escolar</strong> (que arca com o custo).
+                        </p>
+                        <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Público Afetado</span>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center font-bold text-lg mb-4">2</div>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">Quando esse problema aparece?</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Principalmente durante o horário de pico do intervalo/almoço e nos dias em que o cardápio tem menor aceitação pelos alunos.
+                        </p>
+                        <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Gatilho / Momento</span>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center font-bold text-lg mb-4">3</div>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">O que acontece por causa disso?</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Prejuízo financeiro direto, acúmulo desnecessário de lixo orgânico em aterros e desconexão dos estudantes com o valor do alimento.
+                        </p>
+                        <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Impacto & Consequência</span>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center font-bold text-lg mb-4">4</div>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">O que já tentaram fazer?</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Avisos verbais esporádicos no refeitório, cartazes genéricos sobre fome e racionamento fixo de pratos sem ouvir os alunos.
+                        </p>
+                        <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Tentativas Anteriores</span>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow md:col-span-2 lg:col-span-2">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg mb-4">5</div>
+                        <h3 class="font-bold text-slate-900 text-lg mb-2">Por que não funcionou?</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                            Faltou engajamento prático da comunidade escolar. Regras impostas sem participação do aluno criam resistência; cartazes passivos tornam-se "invisíveis" no dia a dia sem dados visíveis de pesagem e metas claras.
+                        </p>
+                        <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">Oportunidade de Inovação</span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Ideation Matrix (4 Core Questions Interactive Accordion/Tabs) -->
+        <section id="faq" class="py-20 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 space-y-3">
+                    <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-600">Base Metodológica</span>
+                    <h2 class="text-3xl font-extrabold text-slate-900">4 Perguntas para Identificar Problemas</h2>
+                    <p class="text-slate-600 text-sm">Clique em cada pergunta para entender como ela se aplica ao contexto do projeto.</p>
+                </div>
+
+                <div class="space-y-4" id="accordion">
+                    <!-- Item 1 -->
+                    <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all duration-200">
+                        <button class="accordion-btn w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center bg-slate-50 hover:bg-slate-100/80">
+                            <span class="flex items-center gap-3">
+                                <i data-lucide="clock" class="w-5 h-5 text-emerald-600"></i>
+                                1. O que está dando trabalho demais?
+                            </span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+                        </button>
+                        <div class="accordion-content hidden p-5 bg-white border-t border-slate-200 text-sm text-slate-600 leading-relaxed space-y-2">
+                            <p><strong>No contexto geral:</strong> Processos manuais, repetitivos ou burocráticos que consomem tempo excessivo (ex: planilhas, agendamentos).</p>
+                            <p><strong>Na Escola:</strong> Separar o lixo orgânico sem triagem prévia e limpar restos pesados das mesas manualmente exige um esforço dobrado da equipe de limpeza.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all duration-200">
+                        <button class="accordion-btn w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center bg-slate-50 hover:bg-slate-100/80">
+                            <span class="flex items-center gap-3">
+                                <i data-lucide="frown" class="w-5 h-5 text-emerald-600"></i>
+                                2. O que está gerando frustração no dia a dia?
+                            </span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+                        </button>
+                        <div class="accordion-content hidden p-5 bg-white border-t border-slate-200 text-sm text-slate-600 leading-relaxed space-y-2">
+                            <p><strong>No contexto geral:</strong> Filas longas, aplicativos travando, serviços difíceis de cancelar.</p>
+                            <p><strong>Na Escola:</strong> Cozinheiras frustradas por verem refeições preparadas com cuidado sendo jogadas no lixo, e alunos frustrados quando a porção servida é maior do que conseguem comer.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all duration-200">
+                        <button class="accordion-btn w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center bg-slate-50 hover:bg-slate-100/80">
+                            <span class="flex items-center gap-3">
+                                <i data-lucide="sparkles" class="w-5 h-5 text-emerald-600"></i>
+                                3. O que poderia ser mais simples?
+                            </span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+                        </button>
+                        <div class="accordion-content hidden p-5 bg-white border-t border-slate-200 text-sm text-slate-600 leading-relaxed space-y-2">
+                            <p><strong>No contexto geral:</strong> Soluções funcionais porém complexas (ex: PIX simplificando transferências bancárias).</p>
+                            <p><strong>Na Escola:</strong> Em vez de pratos padrão e rígidos, permitir a simples pergunta: <em>"Quer porção inteira ou meia?"</em> reduz a sobra imediatamente.</p>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="border border-slate-200 rounded-2xl overflow-hidden transition-all duration-200">
+                        <button class="accordion-btn w-full p-5 text-left font-bold text-slate-900 flex justify-between items-center bg-slate-50 hover:bg-slate-100/80">
+                            <span class="flex items-center gap-3">
+                                <i data-lucide="message-square-warning" class="w-5 h-5 text-emerald-600"></i>
+                                4. O que as pessoas reclamam com frequência?
+                            </span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform duration-200"></i>
+                        </button>
+                        <div class="accordion-content hidden p-5 bg-white border-t border-slate-200 text-sm text-slate-600 leading-relaxed space-y-2">
+                            <p><strong>No contexto geral:</strong> Bateria fraca, roupas com tamanho errado, falta de tempo para rotina saudável.</p>
+                            <p><strong>Na Escola:</strong> Alunos reclamando de determinados pratos repetitivos. Ouvir e adaptar o cardápio com base na preferência é a resposta.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Plan / Next Steps -->
+        <section class="py-16 gradient-bg text-white">
+            <div class="max-w-5xl mx-auto px-4 text-center space-y-6">
+                <h2 class="text-3xl sm:text-4xl font-extrabold">Pronto para implantar na sua escola?</h2>
+                <p class="text-emerald-100 max-w-2xl mx-auto text-base">
+                    Pergunte-se hoje mesmo: <strong>"Como posso diminuir essa dor em 50% na minha instituição?"</strong> Comece pesando o lixo da semana e montando o primeiro comitê aluno-cozinha.
+                </p>
+                <div class="pt-4">
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'});" class="px-8 py-3.5 bg-white text-emerald-900 font-extrabold rounded-xl shadow-lg hover:bg-emerald-50 transition-all">
+                        Voltar ao Topo
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="sprout" class="w-5 h-5 text-emerald-500"></i>
+                <span class="font-bold text-white text-sm">EcoEscola Zero</span>
+            </div>
+            <p>© Metodologia de Validação e Soluções Sustentáveis Escolares. Projeto Educativo.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
     <script>
-        // Carregar dados salvos no carregamento da página
-        document.addEventListener('DOMContentLoaded', () => {
-            loadTasks();
-            loadHabits();
-            loadNotes();
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
         });
 
-        // --- TAREFAS ---
-        function addTask() {
-            const input = document.getElementById('task-input');
-            const text = input.value.trim();
-            if (!text) return;
+        // Simulator Logic
+        const studentsRange = document.getElementById('students-range');
+        const wasteRange = document.getElementById('waste-range');
+        const costInput = document.getElementById('cost-input');
 
-            const tasks = JSON.parse(localStorage.getItem('organizer_tasks') || '[]');
-            tasks.push({ text, completed: false });
-            localStorage.setItem('organizer_tasks', JSON.stringify(tasks));
+        const studentsVal = document.getElementById('students-val');
+        const wasteVal = document.getElementById('waste-val');
+        
+        const dailyKgEl = document.getElementById('daily-kg');
+        const monthlyCostEl = document.getElementById('monthly-cost');
+        const savedKgEl = document.getElementById('saved-kg');
+        const savedCostEl = document.getElementById('saved-cost');
 
-            input.value = '';
-            loadTasks();
+        function updateCalculator() {
+            const students = parseInt(studentsRange.value);
+            const wasteGrams = parseInt(wasteRange.value);
+            const costPerKg = parseFloat(costInput.value) || 0;
+
+            // Update range labels
+            studentsVal.textContent = students;
+            wasteVal.textContent = wasteGrams + ' g';
+
+            // Calculations
+            // Daily Kg = (Students * Grams) / 1000
+            const dailyKg = (students * wasteGrams) / 1000;
+            // Monthly Kg (20 school days)
+            const monthlyKg = dailyKg * 20;
+            // Monthly Cost
+            const monthlyCost = monthlyKg * costPerKg;
+
+            // Potential savings (assuming 60% reduction with 3 solutions)
+            const savedKgMonth = monthlyKg * 0.60;
+            const savedCostMonth = monthlyCost * 0.60;
+
+            // Render Output
+            dailyKgEl.textContent = dailyKg.toFixed(1);
+            monthlyCostEl.textContent = monthlyCost.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+            savedKgEl.textContent = savedKgMonth.toFixed(0) + ' kg';
+            savedCostEl.textContent = 'R$ ' + savedCostMonth.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
         }
 
-        function toggleTask(index) {
-            const tasks = JSON.parse(localStorage.getItem('organizer_tasks') || '[]');
-            tasks[index].completed = !tasks[index].completed;
-            localStorage.setItem('organizer_tasks', JSON.stringify(tasks));
-            loadTasks();
-        }
+        studentsRange.addEventListener('input', updateCalculator);
+        wasteRange.addEventListener('input', updateCalculator);
+        costInput.addEventListener('input', updateCalculator);
 
-        function deleteTask(index) {
-            const tasks = JSON.parse(localStorage.getItem('organizer_tasks') || '[]');
-            tasks.splice(index, 1);
-            localStorage.setItem('organizer_tasks', JSON.stringify(tasks));
-            loadTasks();
-        }
+        // Accordion Logic
+        const accordionBtns = document.querySelectorAll('.accordion-btn');
+        accordionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const content = btn.nextElementSibling;
+                const icon = btn.querySelector('[data-lucide="chevron-down"]');
 
-        function loadTasks() {
-            const tasks = JSON.parse(localStorage.getItem('organizer_tasks') || '[]');
-            const list = document.getElementById('task-list');
-            list.innerHTML = '';
-
-            tasks.forEach((task, index) => {
-                const li = document.createElement('li');
-                if (task.completed) li.classList.add('completed');
-
-                li.innerHTML = `
-                    <div class="item-content" onclick="toggleTask(${index})">
-                        <input type="checkbox" ${task.completed ? 'checked' : ''}>
-                        <span>${task.text}</span>
-                    </div>
-                    <button class="delete-btn" onclick="deleteTask(${index})">Excluir</button>
-                `;
-                list.appendChild(li);
+                // Toggle visibility
+                content.classList.toggle('hidden');
+                
+                // Rotate icon
+                if (!content.classList.contains('hidden')) {
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    icon.style.transform = 'rotate(0deg)';
+                }
             });
-        }
+        });
 
-        // --- HÁBITOS ---
-        function addHabit() {
-            const input = document.getElementById('habit-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const habits = JSON.parse(localStorage.getItem('organizer_habits') || '[]');
-            habits.push({ text, completed: false });
-            localStorage.setItem('organizer_habits', JSON.stringify(habits));
-
-            input.value = '';
-            loadHabits();
-        }
-
-        function toggleHabit(index) {
-            const habits = JSON.parse(localStorage.getItem('organizer_habits') || '[]');
-            habits[index].completed = !habits[index].completed;
-            localStorage.setItem('organizer_habits', JSON.stringify(habits));
-            loadHabits();
-        }
-
-        function deleteHabit(index) {
-            const habits = JSON.parse(localStorage.getItem('organizer_habits') || '[]');
-            habits.splice(index, 1);
-            localStorage.setItem('organizer_habits', JSON.stringify(habits));
-            loadHabits();
-        }
-
-        function loadHabits() {
-            const habits = JSON.parse(localStorage.getItem('organizer_habits') || '[]');
-            const list = document.getElementById('habit-list');
-            list.innerHTML = '';
-
-            habits.forEach((habit, index) => {
-                const li = document.createElement('li');
-                if (habit.completed) li.classList.add('completed');
-
-                li.innerHTML = `
-                    <div class="item-content" onclick="toggleHabit(${index})">
-                        <input type="checkbox" ${habit.completed ? 'checked' : ''}>
-                        <span>${habit.text}</span>
-                    </div>
-                    <button class="delete-btn" onclick="deleteHabit(${index})">Excluir</button>
-                `;
-                list.appendChild(li);
-            });
-        }
-
-        // --- ANOTAÇÕES ---
-        function saveNotes() {
-            const notes = document.getElementById('notes').value;
-            localStorage.setItem('organizer_notes', notes);
-        }
-
-        function loadNotes() {
-            const notes = localStorage.getItem('organizer_notes') || '';
-            document.getElementById('notes').value = notes;
-        }
+        // Run initial calculation
+        updateCalculator();
     </script>
 </body>
 </html>
